@@ -4,6 +4,7 @@
 package http
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"net/http"
@@ -38,6 +39,23 @@ func getFaaSInfraClient() *cHttp.HttpClient {
 	return fsInfraClient
 }
 
+var (
+	httpClientOnce sync.Once
+	httpClient     *http.Client
+)
+
+func GetCommonHttpClient() *http.Client {
+	httpClientOnce.Do(func() {
+		httpClient = &http.Client{
+			Transport: &http.Transport{
+				MaxIdleConns:        100,
+				MaxIdleConnsPerHost: 10,
+			},
+		}
+	})
+	return httpClient
+}
+
 func doRequestMongodb(ctx context.Context, param interface{}) ([]byte, error) {
 	ctx = cUtils.SetApiTimeoutMethodToCtx(ctx, cConstants.RequestMongodb)
 
@@ -53,4 +71,10 @@ func DoRequestRedis(ctx context.Context, param interface{}) ([]byte, map[string]
 
 	data, extra, err := getFaaSInfraClient().PostJson(ctx, GetFaaSInfraPathRedis(), nil, param, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware)
 	return data, extra, err
+}
+
+func DoRequestFile(ctx context.Context, contentType string, body *bytes.Buffer) ([]byte, error) {
+	return errorWrapper(getFaaSInfraClient().PostFormData(ctx, GetFaaSInfraPathFile(), map[string][]string{
+		cConstants.HttpHeaderKeyContentType: {contentType},
+	}, body, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware))
 }

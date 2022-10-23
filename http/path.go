@@ -13,6 +13,7 @@ import (
 const (
 	PathFaaSInfraPathMongodb = "/resource/v3/namespaces/:namespace/db"
 	PathFaaSInfraPathRedis   = "/resource/v2/namespaces/:namespace/cache"
+	FaaSInfraPathFile        = "/resource/v2/namespaces/:namespace/file"
 )
 
 func GetFaaSInfraPathMongodb() string {
@@ -21,4 +22,8 @@ func GetFaaSInfraPathMongodb() string {
 
 func GetFaaSInfraPathRedis() string {
 	return strings.Replace(PathFaaSInfraPathRedis, cConstants.ReplaceNamespace, cUtils.GetNamespace(), 1)
+}
+
+func GetFaaSInfraPathFile() string {
+	return strings.Replace(FaaSInfraPathFile, cConstants.ReplaceNamespace, cUtils.GetNamespace(), 1)
 }

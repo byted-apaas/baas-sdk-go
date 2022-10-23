@@ -52,3 +52,14 @@ func mongodbExample() {
 	}
 	cUtils.PrintLog(result)
 }
+
+func ossExample() {
+	ctx := context.Background()
+	oss := infra.Oss
+	result, err := oss.UploadWithPath(ctx, "test.go", "./test.go", nil)
+	if err != nil {
+		cUtils.PrintLog(err)
+		return
+	}
+	cUtils.PrintLog(result)
+}

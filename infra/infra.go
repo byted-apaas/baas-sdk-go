@@ -5,10 +5,12 @@ package infra
 
 import (
 	mongodbImpl "github.com/byted-apaas/baas-sdk-go/mongodb/impl"
+	"github.com/byted-apaas/baas-sdk-go/oss"
 	"github.com/byted-apaas/baas-sdk-go/redis"
 )
 
 var (
 	MongoDB = mongodbImpl.NewMongodb()
 	Redis   = redis.NewRedis()
+	Oss     = oss.NewOss()
 )
