@@ -7,10 +7,12 @@ import (
 	mongodbImpl "github.com/byted-apaas/baas-sdk-go/mongodb/impl"
 	"github.com/byted-apaas/baas-sdk-go/oss"
 	"github.com/byted-apaas/baas-sdk-go/redis"
+	"github.com/byted-apaas/baas-sdk-go/tasks/impl"
 )
 
 var (
 	MongoDB = mongodbImpl.NewMongodb()
 	Redis   = redis.NewRedis()
 	Oss     = oss.NewOss()
+	Tasks   = impl.NewTasks(nil)
 )
