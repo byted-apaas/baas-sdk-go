@@ -16,8 +16,6 @@ type IRequestOpenapi interface {
 
 //go:generate mockery --name=IRequestOpenapi --structname=RequestOpenapi --filename=RequestOpenapi.go
 type IRequestFaaSInfra interface {
-	InvokeFunction(ctx context.Context, appCtx *structs.AppCtx, apiName string, params map[string]interface{}, result interface{}) error
-	InvokeFunctionAsync(ctx context.Context, appCtx *structs.AppCtx, apiName string, params map[string]interface{}) (int64, error)
 	InvokeFunctionDistributed(ctx context.Context, appCtx *structs.AppCtx, dataset interface{}, handlerFunc string, progressCallbackFunc string, completedCallbackFunc string, options *tasks.Options) (int64, error)
 }
 

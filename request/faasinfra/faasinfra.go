@@ -6,12 +6,9 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/tidwall/gjson"
-
 	"github.com/byted-apaas/baas-sdk-go/common/structs"
 	"github.com/byted-apaas/baas-sdk-go/common/utils"
 	"github.com/byted-apaas/baas-sdk-go/request"
-	"github.com/byted-apaas/baas-sdk-go/request/common"
 	"github.com/byted-apaas/baas-sdk-go/tasks"
 	cConstants "github.com/byted-apaas/server-common-go/constants"
 	cExceptions "github.com/byted-apaas/server-common-go/exceptions"
@@ -33,65 +30,6 @@ func GetInstance() request.IRequestFaaSInfra {
 		})
 	}
 	return reqFaaSInfra
-}
-
-func (r *requestFaaSInfra) InvokeFunction(ctx context.Context, appCtx *structs.AppCtx, apiName string, params map[string]interface{}, result interface{}) error {
-	body, err := common.BuildInvokeParamsStr(ctx, apiName, params)
-	if err != nil {
-		return err
-	}
-
-	namespace, err := utils.GetNamespace(ctx, appCtx)
-	if err != nil {
-		return err
-	}
-	tenantName, err := utils.GetTenantName(ctx, appCtx)
-	if err != nil {
-		return err
-	}
-	headers := map[string][]string{
-		cConstants.HttpHeaderKeyTenant: {tenantName},
-		cConstants.HttpHeaderKeyUser:   {strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10)},
-	}
-
-	data, err := errorWrapper(getFaaSInfraClient(ctx).PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunction(namespace), headers, body, cHttp.AppTokenMiddleware))
-	if err != nil {
-		return err
-	}
-
-	resultRaw := gjson.GetBytes(data, "data").Raw
-	err = cUtils.JsonUnmarshalBytes([]byte(resultRaw), result)
-	if err != nil {
-		return cExceptions.InternalError("InvokeFunction failed, err: %v", err)
-	}
-	return nil
-}
-
-func (r *requestFaaSInfra) InvokeFunctionAsync(ctx context.Context, appCtx *structs.AppCtx, apiName string, params map[string]interface{}) (int64, error) {
-	body, err := common.BuildInvokeParamsStr(ctx, apiName, params)
-	if err != nil {
-		return 0, err
-	}
-
-	namespace, err := utils.GetNamespace(ctx, appCtx)
-	if err != nil {
-		return 0, err
-	}
-	tenantName, err := utils.GetTenantName(ctx, appCtx)
-	if err != nil {
-		return 0, err
-	}
-	headers := map[string][]string{
-		cConstants.HttpHeaderKeyTenant: {tenantName},
-		cConstants.HttpHeaderKeyUser:   {strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10)},
-	}
-
-	data, err := errorWrapper(getFaaSInfraClient(ctx).PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionAsync(namespace), headers, body, cHttp.AppTokenMiddleware))
-	if err != nil {
-		return 0, err
-	}
-
-	return gjson.GetBytes(data, "task_id").Int(), nil
 }
 
 func (r *requestFaaSInfra) InvokeFunctionDistributed(ctx context.Context, appCtx *structs.AppCtx, dataset interface{}, handlerFunc string, progressCallbackFunc string, completedCallbackFunc string, options *tasks.Options) (int64, error) {

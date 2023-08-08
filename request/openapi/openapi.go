@@ -17,7 +17,7 @@ import (
 type RequestHttp struct{}
 
 func (r *RequestHttp) InvokeFunctionAsync(ctx context.Context, appCtx *structs.AppCtx, apiName string, params map[string]interface{}) (int64, error) {
-	body, err := reqCommon.BuildInvokeParamsStr(ctx, apiName, params)
+	body, err := reqCommon.BuildInvokeParamsStr(ctx, apiName, params, appCtx == nil || appCtx.Credential == nil || appCtx.Mode != structs.AppModeOpenSDK)
 	if err != nil {
 		return 0, err
 	}
