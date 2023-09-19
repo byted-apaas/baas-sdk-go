@@ -165,12 +165,8 @@ func (c *baseCmd) request(ctx context.Context) {
 		return
 	}
 
-	if http.HasError(c.result.Code) {
-		if http.IsSysError(c.result.Code) {
-			c.err = cExceptions.InternalError("[Redis] call remote failed, err: %v ([%v] %v)", c.result.Msg, c.result.Code, cUtils.GetLogIDFromExtra(extra))
-		} else {
-			c.err = cExceptions.InvalidParamError("[Redis] call remote failed, err: %v ([%v] %v)", c.result.Msg, c.result.Code, cUtils.GetLogIDFromExtra(extra))
-		}
+	if c.result.Code != cExceptions.SCSuccess {
+		c.err = cExceptions.NewErrWithCode(c.result.Code, c.result.Msg, cUtils.GetLogIDFromExtra(extra))
 		return
 	}
 
