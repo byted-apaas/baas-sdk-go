@@ -59,7 +59,7 @@ func GetCommonHttpClient() *http.Client {
 func doRequestMongodb(ctx context.Context, param interface{}) ([]byte, error) {
 	ctx = cUtils.SetApiTimeoutMethodToCtx(ctx, cConstants.RequestMongodb)
 
-	data, err := errorWrapper(getFaaSInfraClient().PostBson(ctx, GetFaaSInfraPathMongodb(), nil, param, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware))
+	data, err := cUtils.ErrorWrapper(getFaaSInfraClient().PostBson(ctx, GetFaaSInfraPathMongodb(), nil, param, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware))
 	if err != nil {
 		return data, err
 	}
@@ -74,7 +74,7 @@ func DoRequestRedis(ctx context.Context, param interface{}) ([]byte, map[string]
 }
 
 func DoRequestFile(ctx context.Context, contentType string, body *bytes.Buffer) ([]byte, error) {
-	return errorWrapper(getFaaSInfraClient().PostFormData(ctx, GetFaaSInfraPathFile(), map[string][]string{
+	return cUtils.ErrorWrapper(getFaaSInfraClient().PostFormData(ctx, GetFaaSInfraPathFile(), map[string][]string{
 		cConstants.HttpHeaderKeyContentType: {contentType},
 	}, body, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware))
 }

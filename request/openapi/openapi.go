@@ -35,7 +35,7 @@ func (r *RequestHttp) InvokeFunctionAsync(ctx context.Context, appCtx *structs.A
 		cConstants.HttpHeaderKeyUser:   {strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10)},
 	}
 
-	data, err := errorWrapper(getOpenapiClient().PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionAsync(namespace), headers, body, cHttp.AppTokenMiddleware))
+	data, err := cUtils.ErrorWrapper(getOpenapiClient().PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionAsync(namespace), headers, body, cHttp.AppTokenMiddleware))
 	if err != nil {
 		return 0, err
 	}
