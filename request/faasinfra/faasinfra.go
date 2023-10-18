@@ -74,7 +74,7 @@ func (r *requestFaaSInfra) InvokeFunctionDistributed(ctx context.Context, appCtx
 		"x-kunlun-loop-masks":   lookMask,
 	}
 
-	data, err := errorWrapper(getFaaSInfraClient(ctx).PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionDistributed(namespace), headers, body, cHttp.AppTokenMiddleware))
+	data, err := cUtils.ErrorWrapper(getFaaSInfraClient(ctx).PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionDistributed(namespace), headers, body, cHttp.AppTokenMiddleware))
 	if err != nil {
 		return 0, err
 	}
