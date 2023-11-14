@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/byted-apaas/baas-sdk-go/version"
 	cConstants "github.com/byted-apaas/server-common-go/constants"
 	cHttp "github.com/byted-apaas/server-common-go/http"
 	cUtils "github.com/byted-apaas/server-common-go/utils"
@@ -31,9 +32,10 @@ func getFaaSInfraClient() *cHttp.HttpClient {
 					TLSHandshakeTimeout: cConstants.HttpClientTLSTimeoutDefault,
 					MaxIdleConns:        1000,
 					MaxIdleConnsPerHost: 10,
-					IdleConnTimeout:     30 * time.Second,
+					IdleConnTimeout:     60 * time.Second,
 				},
 			},
+			FromSDK: version.GetBaaSSDKInfo(),
 		}
 	})
 	return fsInfraClient

@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/byted-apaas/baas-sdk-go/version"
 	cConstants "github.com/byted-apaas/server-common-go/constants"
 	cHttp "github.com/byted-apaas/server-common-go/http"
 )
@@ -27,6 +28,7 @@ func getOpenapiClient() *cHttp.HttpClient {
 					IdleConnTimeout:     60 * time.Second,
 				},
 			},
+			FromSDK: version.GetBaaSSDKInfo(),
 		}
 	})
 	return openapiClient

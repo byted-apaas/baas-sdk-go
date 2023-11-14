@@ -2,6 +2,7 @@ package oss
 
 import (
 	"bytes"
+	cUtils "github.com/byted-apaas/server-common-go/utils"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -47,6 +48,10 @@ func readFromURL(ctx context.Context, targetURL string) ([]byte, error) {
 }
 
 func uploadWithContent(ctx context.Context, name string, content []byte, option *Option) (*UploadResult, error) {
+	if !cUtils.IsExternalFaaS() {
+		return nil, cException.InvalidParamError("unsupport oss")
+	}
+
 	if len(content) > constants.MaxFileSize {
 		return nil, cException.InvalidParamError("file too large, exceed %v", constants.MaxFileSize)
 	}
