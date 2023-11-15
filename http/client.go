@@ -52,7 +52,7 @@ func getFaaSInfraClient() *cHttp.HttpClient {
 				TLSHandshakeTimeout: cConstants.HttpClientTLSTimeoutDefault,
 				MaxIdleConns:        1000,
 				MaxIdleConnsPerHost: 10,
-				IdleConnTimeout:     60 * time.Second,
+				IdleConnTimeout:     30 * time.Second,
 			},
 		}
 	}
@@ -70,6 +70,7 @@ func GetCommonHttpClient() *http.Client {
 			Transport: &http.Transport{
 				MaxIdleConns:        100,
 				MaxIdleConnsPerHost: 10,
+				IdleConnTimeout:     30 * time.Second,
 			},
 		}
 	})
