@@ -4,6 +4,7 @@
 package impl
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/common/structs"
 	"context"
 	"fmt"
 	"testing"
@@ -14,7 +15,6 @@ import (
 
 	"github.com/byted-apaas/baas-sdk-go/common/utils"
 	cond "github.com/byted-apaas/baas-sdk-go/mongodb/condition"
-	"github.com/byted-apaas/baas-sdk-go/mongodb/structs"
 )
 
 type Goods struct {

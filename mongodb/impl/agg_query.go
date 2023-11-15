@@ -4,10 +4,10 @@
 package impl
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/request/faasinfra"
 	"context"
 	"reflect"
 
-	"github.com/byted-apaas/baas-sdk-go/http"
 	"github.com/byted-apaas/baas-sdk-go/mongodb"
 	cond "github.com/byted-apaas/baas-sdk-go/mongodb/condition"
 	op "github.com/byted-apaas/baas-sdk-go/mongodb/operator"
@@ -38,7 +38,7 @@ func (a *AggQuery) Find(ctx context.Context, records interface{}) error {
 	}
 	a.SetOp(OpType_Aggregate)
 	a.buildPipeline()
-	return http.Find(ctx, a.MongodbParam, records)
+	return faasinfra.Find(ctx, a.MongodbParam, records)
 }
 
 func (a *AggQuery) FindOne(ctx context.Context, record interface{}) error {
@@ -48,7 +48,7 @@ func (a *AggQuery) FindOne(ctx context.Context, record interface{}) error {
 	a.SetOp(OpType_Aggregate)
 	a.SetOne(true)
 	a.buildPipeline()
-	return http.FindOne(ctx, a.MongodbParam, record)
+	return faasinfra.FindOne(ctx, a.MongodbParam, record)
 }
 
 func (a *AggQuery) GroupBy(field interface{}, alias ...interface{}) mongodb.IAggQuery {

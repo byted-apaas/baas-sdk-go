@@ -4,12 +4,12 @@
 package redis
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/request/faasinfra"
 	"context"
 	"encoding/json"
 	"strconv"
 	"time"
 
-	"github.com/byted-apaas/baas-sdk-go/http"
 	cExceptions "github.com/byted-apaas/server-common-go/exceptions"
 	cUtils "github.com/byted-apaas/server-common-go/utils"
 )
@@ -154,7 +154,7 @@ type redisArgumentList struct {
 
 // RedisCmdExecution Request
 func (c *baseCmd) request(ctx context.Context) {
-	data, extra, e := http.DoRequestRedis(ctx, redisArgumentList{Cmd: c.name, Args: c.args})
+	data, extra, e := faasinfra.DoRequestRedis(ctx, redisArgumentList{Cmd: c.name, Args: c.args})
 	if e != nil {
 		c.err = cExceptions.ErrWrap(e)
 		return

@@ -4,10 +4,10 @@
 package impl
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/request/faasinfra"
 	"context"
 	"reflect"
 
-	"github.com/byted-apaas/baas-sdk-go/http"
 	"github.com/byted-apaas/baas-sdk-go/mongodb"
 	cond "github.com/byted-apaas/baas-sdk-go/mongodb/condition"
 	op "github.com/byted-apaas/baas-sdk-go/mongodb/operator"
@@ -50,7 +50,7 @@ func (q *Query) Update(ctx context.Context, record interface{}) error {
 	q.SetOne(true)
 	q.SetUpsert(false)
 	q.buildQuery()
-	return http.Update(ctx, q.MongodbParam)
+	return faasinfra.Update(ctx, q.MongodbParam)
 }
 
 func (q *Query) Upsert(ctx context.Context, record interface{}) error {
@@ -71,7 +71,7 @@ func (q *Query) Upsert(ctx context.Context, record interface{}) error {
 	q.SetOne(true)
 	q.SetUpsert(true)
 	q.buildQuery()
-	return http.Update(ctx, q.MongodbParam)
+	return faasinfra.Update(ctx, q.MongodbParam)
 }
 
 func (q *Query) BatchUpdate(ctx context.Context, record interface{}) error {
@@ -92,7 +92,7 @@ func (q *Query) BatchUpdate(ctx context.Context, record interface{}) error {
 	q.SetOne(false)
 	q.SetUpsert(false)
 	q.buildQuery()
-	return http.Update(ctx, q.MongodbParam)
+	return faasinfra.Update(ctx, q.MongodbParam)
 }
 
 func (q *Query) Delete(ctx context.Context) error {
@@ -102,7 +102,7 @@ func (q *Query) Delete(ctx context.Context) error {
 	q.SetOp(OpType_Delete)
 	q.SetOne(true)
 	q.buildQuery()
-	return http.Delete(ctx, q.MongodbParam)
+	return faasinfra.Delete(ctx, q.MongodbParam)
 }
 
 func (q *Query) BatchDelete(ctx context.Context) error {
@@ -112,7 +112,7 @@ func (q *Query) BatchDelete(ctx context.Context) error {
 	q.SetOp(OpType_Delete)
 	q.SetOne(false)
 	q.buildQuery()
-	return http.Delete(ctx, q.MongodbParam)
+	return faasinfra.Delete(ctx, q.MongodbParam)
 }
 
 func (q *Query) Find(ctx context.Context, records interface{}) error {
@@ -121,7 +121,7 @@ func (q *Query) Find(ctx context.Context, records interface{}) error {
 	}
 	q.SetOp(OpType_Find)
 	q.buildQuery()
-	return http.Find(ctx, q.MongodbParam, records)
+	return faasinfra.Find(ctx, q.MongodbParam, records)
 }
 
 func (q *Query) FindOne(ctx context.Context, record interface{}) error {
@@ -131,7 +131,7 @@ func (q *Query) FindOne(ctx context.Context, record interface{}) error {
 	q.SetOp(OpType_FindOne)
 	q.SetLimit(1)
 	q.buildQuery()
-	return http.FindOne(ctx, q.MongodbParam, record)
+	return faasinfra.FindOne(ctx, q.MongodbParam, record)
 }
 
 func (q *Query) Where(condition interface{}, args ...interface{}) mongodb.IQuery {
@@ -204,7 +204,7 @@ func (q *Query) Count(ctx context.Context) (int64, error) {
 
 	q.SetOp(OpType_Count)
 	q.buildQuery()
-	return http.Count(ctx, q.MongodbParam)
+	return faasinfra.Count(ctx, q.MongodbParam)
 }
 
 //func (q *Query) Distinct(ctx context.Context, field string, v interface{}) error {
