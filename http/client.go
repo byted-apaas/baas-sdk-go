@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"net"
 	"net/http"
 	"sync"
 	"time"
@@ -38,6 +39,23 @@ func getFaaSInfraClient() *cHttp.HttpClient {
 			FromSDK: version.GetBaaSSDKInfo(),
 		}
 	})
+	if cUtils.EnableMesh() {
+		fsInfraClient.MeshClient = &http.Client{
+			Transport: &http.Transport{
+				DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+					unixAddr, err := net.ResolveUnixAddr("unix", cUtils.GetSocketAddr())
+					if err != nil {
+						return nil, err
+					}
+					return net.DialUnix("unix", nil, unixAddr)
+				},
+				TLSHandshakeTimeout: cConstants.HttpClientTLSTimeoutDefault,
+				MaxIdleConns:        1000,
+				MaxIdleConnsPerHost: 10,
+				IdleConnTimeout:     60 * time.Second,
+			},
+		}
+	}
 	return fsInfraClient
 }
 
