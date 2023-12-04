@@ -4,11 +4,10 @@
 package mongodb
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/common/structs"
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
-	"github.com/byted-apaas/baas-sdk-go/mongodb/structs"
 )
 
 type IMongodb interface {
