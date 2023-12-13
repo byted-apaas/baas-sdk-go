@@ -14,3 +14,6 @@ retract v0.0.8
 
 // Deprecated
 retract v0.0.9
+
+// Deprecated
+retract v0.0.11

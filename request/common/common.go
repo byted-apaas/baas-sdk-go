@@ -18,7 +18,7 @@ func BuildInvokeParamsStr(ctx context.Context, funcAPIName string, params interf
 		"apiAlias":    funcAPIName,
 		"params":      bizParams,
 		"context":     sysParams,
-		"triggerType": "workflow",
+		"triggerType": "default-trigger",
 	}, nil
 }
 
