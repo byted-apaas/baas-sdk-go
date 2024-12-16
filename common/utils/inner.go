@@ -3,13 +3,13 @@ package utils
 import (
 	"context"
 	"strconv"
+	"strings"
 
 	"github.com/byted-apaas/baas-sdk-go/common/structs"
 	cConstants "github.com/byted-apaas/server-common-go/constants"
 	cExceptions "github.com/byted-apaas/server-common-go/exceptions"
 	cHttp "github.com/byted-apaas/server-common-go/http"
 	cUtils "github.com/byted-apaas/server-common-go/utils"
-	"github.com/bytedance/gopkg/cloud/metainfo"
 )
 
 func SetCtx(ctx context.Context, appCtx *structs.AppCtx, method string) context.Context {
@@ -38,9 +38,8 @@ func SetAppConfToCtx(ctx context.Context, appCtx *structs.AppCtx) context.Contex
 	ctx = context.WithValue(ctx, cConstants.CtxKeyOpenapiDomain, conf.OpenAPIDomain)
 	ctx = context.WithValue(ctx, cConstants.CtxKeyFaaSInfraDomain, conf.FaaSInfraDomain)
 	ctx = context.WithValue(ctx, cConstants.CtxKeyAGWDomain, conf.InnerAPIDomain)
-	boe := conf.BOE
-	if len(boe) > 0 {
-		ctx = cUtils.SetEnvBoeToCtx(ctx, boe)
+	if strings.HasSuffix(targetEnv.String(), "boe") {
+		ctx = cUtils.SetEnvBoeToCtx(ctx, "boe")
 	}
 
 	return ctx
@@ -72,6 +71,6 @@ func SetUserMetaInfoToContext(ctx context.Context, appCtx *structs.AppCtx) conte
 	if appCtx.IsOpenSDK() {
 		return ctx
 	}
-	ctx = metainfo.WithValue(ctx, cConstants.HttpHeaderKeyUser, strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10))
+	ctx = context.WithValue(ctx, cConstants.HttpHeaderKeyUser, strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10))
 	return ctx
 }

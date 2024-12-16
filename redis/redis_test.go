@@ -10,8 +10,9 @@ import (
 	"testing"
 	"time"
 
-	cConstants "github.com/byted-apaas/server-common-go/constants"
 	"github.com/stretchr/testify/assert"
+
+	cConstants "github.com/byted-apaas/server-common-go/constants"
 )
 
 var (

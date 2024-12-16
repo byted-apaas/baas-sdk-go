@@ -4,13 +4,13 @@
 package impl
 
 import (
+	"github.com/byted-apaas/baas-sdk-go/common/structs"
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/byted-apaas/baas-sdk-go/http"
 	"github.com/byted-apaas/baas-sdk-go/mongodb"
-	"github.com/byted-apaas/baas-sdk-go/mongodb/structs"
+	"github.com/byted-apaas/baas-sdk-go/request/faasinfra"
 	cExceptions "github.com/byted-apaas/server-common-go/exceptions"
 )
 
@@ -33,7 +33,7 @@ func (t *Table) Create(ctx context.Context, record interface{}) (*structs.Record
 
 	t.SetOp(OpType_Insert)
 	t.SetDocs([]interface{}{record})
-	return http.Create(ctx, t.MongodbParam)
+	return faasinfra.Create(ctx, t.MongodbParam)
 }
 
 func (t *Table) BatchCreate(ctx context.Context, records interface{}) ([]primitive.ObjectID, error) {
@@ -43,7 +43,7 @@ func (t *Table) BatchCreate(ctx context.Context, records interface{}) ([]primiti
 
 	t.SetOp(OpType_Insert)
 	t.SetDocs(records)
-	return http.BatchCreate(ctx, t.MongodbParam)
+	return faasinfra.BatchCreate(ctx, t.MongodbParam)
 }
 
 func (t *Table) Where(condition interface{}, args ...interface{}) mongodb.IQuery {

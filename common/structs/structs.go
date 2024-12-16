@@ -1,9 +1,17 @@
-package oss
+// Copyright 2022 ByteDance Ltd. and/or its affiliates
+// SPDX-License-Identifier: MIT
+
+package structs
 
 import (
 	"errors"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type RecordOnlyId struct {
+	ID primitive.ObjectID `json:"_id" bson:"_id"`
+}
 
 type Option struct {
 	Type string `json:"type,omitempty"` // http content type
@@ -14,12 +22,12 @@ type UploadResult struct {
 	URL string `json:"url,omitempty"`
 }
 
-type uploadError struct {
+type UploadError struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`
 }
 
-func (e uploadError) error() error {
+func (e UploadError) Error() error {
 	if e.Code != 0 {
 		if len(e.Message) == 0 {
 			e.Message = "upload file fail"
@@ -29,9 +37,9 @@ func (e uploadError) error() error {
 	return nil
 }
 
-type fileUploadResult struct {
+type FileUploadResult struct {
 	Data *struct {
 		URL string `json:"url,omitempty" bson:"url,omitempty"`
-		*uploadError
+		*UploadError
 	} `json:"data" bson:"data"`
 }
