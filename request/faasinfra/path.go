@@ -1,24 +1,30 @@
 package faasinfra
 
 import (
+	"strings"
+
 	cConstants "github.com/byted-apaas/server-common-go/constants"
 	cUtils "github.com/byted-apaas/server-common-go/utils"
-	"strings"
 )
 
 const (
-	PathInvokeFunction            = "/cloudfunction/v1/namespaces/:namespace/function/invokeSync"
-	PathInvokeFunctionAsync       = "/faasAsyncTask/v1/namespaces/:namespace/asyncTask/CreateAsyncTask"
+	// PathInvokeFunction Deprecated
+	PathInvokeFunction = "/cloudfunction/v1/namespaces/:namespace/function/invokeSync"
+	// PathInvokeFunctionAsync Deprecated
+	PathInvokeFunctionAsync = "/faasAsyncTask/v1/namespaces/:namespace/asyncTask/CreateAsyncTask"
+
 	PathInvokeFunctionDistributed = "/distributedTask/v1/namespaces/:namespace/create"
 	PathFaaSInfraPathMongodb      = "/resource/v3/namespaces/:namespace/db"
 	PathFaaSInfraPathRedis        = "/resource/v2/namespaces/:namespace/cache"
 	FaaSInfraPathFile             = "/resource/v2/namespaces/:namespace/file"
 )
 
+// GetPathInvokeFunction Deprecated
 func GetPathInvokeFunction(namespace string) string {
 	return cUtils.NewPathReplace(PathInvokeFunction).Namespace(namespace).Path()
 }
 
+// GetPathInvokeFunctionAsync Deprecated
 func GetPathInvokeFunctionAsync(namespace string) string {
 	return cUtils.NewPathReplace(PathInvokeFunctionAsync).Namespace(namespace).Path()
 }

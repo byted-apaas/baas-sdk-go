@@ -34,7 +34,7 @@ func (r *RequestHttp) InvokeFunctionAsync(ctx context.Context, appCtx *structs.A
 		cConstants.HttpHeaderKeyTenant: {tenantName},
 		cConstants.HttpHeaderKeyUser:   {strconv.FormatInt(cUtils.GetUserIDFromCtx(ctx), 10)},
 	}
-
+	ctx = cUtils.SetApiTimeoutMethodToCtx(ctx, cConstants.CreateAsyncTask)
 	data, err := cUtils.ErrorWrapper(getOpenapiClient().PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionAsync(namespace), headers, body, cHttp.AppTokenMiddleware))
 	if err != nil {
 		return 0, err
