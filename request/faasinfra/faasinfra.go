@@ -6,8 +6,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -15,6 +13,9 @@ import (
 	"reflect"
 	"strconv"
 	"sync"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/byted-apaas/baas-sdk-go/common/constants"
 	"github.com/byted-apaas/baas-sdk-go/common/structs"
@@ -86,6 +87,7 @@ func (r *requestFaaSInfra) InvokeFunctionDistributed(ctx context.Context, appCtx
 		"x-kunlun-loop-masks":   lookMask,
 	}
 
+	ctx = cUtils.SetApiTimeoutMethodToCtx(ctx, cConstants.CreateDistributedTask)
 	data, err := cUtils.ErrorWrapper(getFaaSInfraClient().PostJson(utils.SetAppConfToCtx(ctx, appCtx), GetPathInvokeFunctionDistributed(namespace), headers, body, cHttp.AppTokenMiddleware))
 	if err != nil {
 		return 0, err
@@ -108,6 +110,7 @@ func DoRequestRedis(ctx context.Context, param interface{}) ([]byte, map[string]
 }
 
 func DoRequestFile(ctx context.Context, contentType string, body *bytes.Buffer) ([]byte, error) {
+	ctx = cUtils.SetApiTimeoutMethodToCtx(ctx, cConstants.RequestFile)
 	return cUtils.ErrorWrapper(getFaaSInfraClient().PostFormData(ctx, GetFaaSInfraPathFile(), map[string][]string{
 		cConstants.HttpHeaderKeyContentType: {contentType},
 	}, body, cHttp.AppTokenMiddleware, cHttp.TenantAndUserMiddleware, cHttp.ServiceIDMiddleware))
